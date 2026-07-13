@@ -7,9 +7,8 @@ import Link from "next/link";
 
 export default function AgentPage() {
   const [url, setUrl] = useState("https://google.com");
+  const [screenshot, setScreenshot] = useState<string>("");
   const [logs, setLogs] = useState<string[]>([
-    "SYSTEM: Initialize Playwright Session...",
-    "SYSTEM: Launching headless Chromium instance...",
     "SYSTEM: Ready for command."
   ]);
   const [chatHistory, setChatHistory] = useState<{ sender: 'user' | 'agent', text: string }[]>([
@@ -23,26 +22,36 @@ export default function AgentPage() {
   const handleSendMessage = (text: string) => {
     setChatHistory((prev) => [...prev, { sender: 'user', text }]);
     addLog(`USER: ${text}`);
-    
-    // Simulate Agent Steps
-    setTimeout(() => {
-      addLog("AGENT: Decomposing instruction into plan steps...");
-      addLog("AGENT: STEP 1 - Navigate to google.com");
-      setUrl("https://google.com");
-    }, 1000);
 
-    setTimeout(() => {
-      addLog("AGENT: STEP 2 - Click search input field");
-    }, 2500);
+    const eventSource = new EventSource(`/api/agent?prompt=${encodeURIComponent(text)}`);
 
-    setTimeout(() => {
-      addLog(`AGENT: STEP 3 - Fill search input with '${text}'`);
-    }, 4000);
+    eventSource.onmessage = (event) => {
+      try {
+        const payload = JSON.parse(event.data);
+        if (payload.type === "log") {
+          addLog(payload.data);
+          if (payload.data.includes("SYSTEM: Task complete.")) {
+            setChatHistory((prev) => [...prev, { sender: 'agent', text: "I have completed the automation task!" }]);
+            eventSource.close();
+          }
+        } else if (payload.type === "screenshot") {
+          setScreenshot(payload.data);
+        } else if (payload.type === "url") {
+          setUrl(payload.data);
+        } else if (payload.type === "error") {
+          addLog(payload.data);
+          setChatHistory((prev) => [...prev, { sender: 'agent', text: `An error occurred: ${payload.data}` }]);
+          eventSource.close();
+        }
+      } catch (err: any) {
+        addLog(`SYSTEM: Failed to parse event: ${err.message}`);
+      }
+    };
 
-    setTimeout(() => {
-      setChatHistory((prev) => [...prev, { sender: 'agent', text: `Search performed successfully for: "${text}"` }]);
-      addLog("SYSTEM: Task complete. Awaiting new instructions.");
-    }, 5500);
+    eventSource.onerror = () => {
+      addLog("SYSTEM: Connection closed.");
+      eventSource.close();
+    };
   };
 
   return (
@@ -68,7 +77,7 @@ export default function AgentPage() {
 
         {/* Center Panel: Interactive Browser */}
         <div className="lg:col-span-5 h-full flex flex-col">
-          <BrowserPreview currentUrl={url} />
+          <BrowserPreview currentUrl={url} screenshot={screenshot} />
         </div>
 
         {/* Right Panel: Execution Logs */}

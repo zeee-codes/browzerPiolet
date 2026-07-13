@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 interface BrowserPreviewProps {
   currentUrl: string;
   screenshot?: string;
-  isRunning?: boolean;
+  isRunning: boolean;
 }
 
 export default function BrowserPreview({ currentUrl, screenshot, isRunning }: BrowserPreviewProps) {

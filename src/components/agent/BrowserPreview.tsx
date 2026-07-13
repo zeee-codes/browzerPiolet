@@ -4,9 +4,10 @@ import { motion } from "framer-motion";
 interface BrowserPreviewProps {
   currentUrl: string;
   screenshot?: string;
+  isRunning?: boolean;
 }
 
-export default function BrowserPreview({ currentUrl, screenshot }: BrowserPreviewProps) {
+export default function BrowserPreview({ currentUrl, screenshot, isRunning }: BrowserPreviewProps) {
   return (
     <div className="flex-1 bg-[#e0dcd3] border-4 border-black brutal-shadow p-4 flex flex-col h-full overflow-hidden">
       {/* Physical Address Bar & Browser top navigation */}

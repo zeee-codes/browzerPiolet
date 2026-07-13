@@ -1,109 +1,144 @@
 "use client";
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15, delayChildren: 0.2 }
+  }
+};
+
+const item = {
+  hidden: { y: 60, opacity: 0 },
+  show: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 200, damping: 20 } }
+};
+
 export default function LandingHero() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const subtitleRef = useRef<HTMLParagraphElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline();
-      
-      tl.from(".reveal-block", {
-        y: 50,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: "back.out(1.7)",
-        delay: 0.2
-      });
-
-      tl.from(".fade-in", {
-        y: 20,
-        opacity: 0,
-        duration: 0.6,
-        ease: "power2.out"
-      }, "-=0.4");
-    }, containerRef.current || undefined);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section ref={containerRef} className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-32">
+    <section className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-32 bg-[#EAEAEA]">
+      {/* Dot grid background */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ backgroundImage: "radial-gradient(#bbb 1px, transparent 1px)", backgroundSize: "22px 22px" }}
+      />
+
       <div className="container relative z-10 mx-auto px-6 flex flex-col items-center text-center">
-        <h1 ref={titleRef} className="text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter mb-8 leading-[0.9]">
-          <div className="overflow-hidden p-2">
-            <span className="inline-block reveal-block bg-accent-yellow px-4 border-4 border-black brutal-shadow -rotate-2">Your</span>
-          </div>
-          <div className="overflow-hidden p-2">
-            <span className="inline-block reveal-block bg-white px-4 border-4 border-black brutal-shadow rotate-1">Browser.</span>
-          </div>
-          <div className="overflow-hidden p-2">
-            <span className="inline-block reveal-block bg-accent-blue text-white px-4 border-4 border-black brutal-shadow">Autonomous.</span>
-          </div>
-        </h1>
-        
-        <p ref={subtitleRef} className="fade-in max-w-2xl text-xl md:text-2xl font-bold bg-white border-4 border-black p-6 brutal-shadow mb-12">
+        <motion.h1
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter mb-8 leading-[0.9]"
+        >
+          <motion.div variants={item} className="overflow-hidden py-2">
+            <span className="inline-block bg-[#DFFF00] px-4 border-4 border-black -rotate-2"
+              style={{ boxShadow: "8px 8px 0px 0px #000" }}>
+              Your
+            </span>
+          </motion.div>
+          <motion.div variants={item} className="overflow-hidden py-2">
+            <span className="inline-block bg-white px-4 border-4 border-black rotate-1"
+              style={{ boxShadow: "8px 8px 0px 0px #000" }}>
+              Browser.
+            </span>
+          </motion.div>
+          <motion.div variants={item} className="overflow-hidden py-2">
+            <span className="inline-block bg-[#0055FF] text-white px-4 border-4 border-black"
+              style={{ boxShadow: "8px 8px 0px 0px #000" }}>
+              Autonomous.
+            </span>
+          </motion.div>
+        </motion.h1>
+
+        <motion.p
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.7, duration: 0.6 }}
+          className="max-w-2xl text-xl md:text-2xl font-bold bg-white border-4 border-black p-6 mb-12"
+          style={{ boxShadow: "8px 8px 0px 0px #000" }}
+        >
           BrowserPilot AI understands instructions and interacts with any website on your behalf.
           Watch it click, type, and extract data.
-        </p>
+        </motion.p>
 
-        <div className="fade-in flex items-center gap-6">
-          <Link href="/agent" className="px-10 py-5 bg-accent-pink text-white font-black text-xl uppercase tracking-wider brutal-border brutal-shadow brutal-shadow-hover skeuo-button active:skeuo-inner inline-block">
-            Start Automating
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.9, duration: 0.5 }}
+          className="flex items-center gap-6 flex-wrap justify-center"
+        >
+          <Link href="/agent">
+            <motion.span
+              whileHover={{ x: 4, y: 4, boxShadow: "4px 4px 0px 0px #000" }}
+              whileTap={{ x: 8, y: 8, boxShadow: "0px 0px 0px 0px #000" }}
+              className="block px-10 py-5 bg-[#FF0055] text-white font-black text-xl uppercase tracking-wider border-4 border-black cursor-pointer"
+              style={{ boxShadow: "8px 8px 0px 0px #000" }}
+            >
+              Start Automating →
+            </motion.span>
           </Link>
-          <button className="px-10 py-5 bg-white font-black text-xl uppercase tracking-wider brutal-border brutal-shadow brutal-shadow-hover skeuo-button">
+          <motion.button
+            whileHover={{ x: 4, y: 4, boxShadow: "4px 4px 0px 0px #000" }}
+            whileTap={{ x: 8, y: 8, boxShadow: "0px 0px 0px 0px #000" }}
+            className="px-10 py-5 bg-white font-black text-xl uppercase tracking-wider border-4 border-black"
+            style={{ boxShadow: "8px 8px 0px 0px #000" }}
+          >
             Watch Demo
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
 
-      {/* Heavy Physical Browser Mockup */}
-      <motion.div 
-        className="mt-24 w-full max-w-5xl mx-auto px-6 fade-in relative z-20"
+      {/* Floating browser mockup */}
+      <motion.div
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.8, duration: 0.8, type: "spring", stiffness: 100, damping: 20 }}
+        transition={{ delay: 1.1, duration: 0.9, type: "spring", stiffness: 80, damping: 18 }}
+        className="mt-20 w-full max-w-5xl mx-auto px-6"
       >
-        {/* Physical thick beige plastic casing */}
-        <div className="relative rounded-lg border-8 border-black bg-[#e0dcd3] brutal-shadow p-4 aspect-video flex flex-col">
-          
-          {/* Hardware Browser Top Bar */}
-          <div className="h-16 border-4 border-black bg-white flex items-center px-4 gap-4 mb-4 brutal-shadow skeuo-inner">
-            {/* Physical Buttons */}
-            <div className="flex gap-3">
-              <div className="w-6 h-6 rounded-full bg-accent-pink border-4 border-black brutal-shadow skeuo-button" />
-              <div className="w-6 h-6 rounded-full bg-accent-yellow border-4 border-black brutal-shadow skeuo-button" />
-              <div className="w-6 h-6 rounded-full bg-green-500 border-4 border-black brutal-shadow skeuo-button" />
+        <div
+          className="rounded-lg border-8 border-black bg-[#e0dcd3] p-4 flex flex-col"
+          style={{ boxShadow: "12px 12px 0px 0px #000", aspectRatio: "16/9" }}
+        >
+          {/* Browser top bar */}
+          <div
+            className="h-16 border-4 border-black bg-white flex items-center px-4 gap-4 mb-4"
+            style={{ boxShadow: "4px 4px 0px 0px #000" }}
+          >
+            <div className="flex gap-2">
+              <div className="w-5 h-5 rounded-full bg-[#FF0055] border-2 border-black" />
+              <div className="w-5 h-5 rounded-full bg-[#DFFF00] border-2 border-black" />
+              <div className="w-5 h-5 rounded-full bg-green-500 border-2 border-black" />
             </div>
-            
-            {/* Address Bar */}
-            <div className="ml-4 flex-1 bg-[#f0f0f0] h-10 border-4 border-black brutal-shadow flex items-center px-4 font-mono font-bold text-lg skeuo-inner">
+            <div
+              className="ml-4 flex-1 bg-[#f0f0f0] h-9 border-4 border-black flex items-center px-4 font-mono font-bold text-sm"
+              style={{ boxShadow: "inset 2px 2px 6px rgba(0,0,0,0.2)" }}
+            >
               https://example.com/automation
             </div>
           </div>
-          
-          {/* Fake Screen Content */}
-          <div className="flex-1 border-4 border-black bg-white relative overflow-hidden skeuo-inner flex flex-col items-center justify-center">
-            {/* Scanline effect over screen */}
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0)_50%,rgba(0,0,0,0.05)_50%)] bg-[length:100%_4px] pointer-events-none z-10" />
-            
-            <motion.div 
-              animate={{ 
-                rotate: 360
-              }}
-              transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
-              className="w-32 h-32 border-8 border-dashed border-accent-blue rounded-full absolute"
+
+          {/* Screen */}
+          <div
+            className="flex-1 border-4 border-black bg-white relative overflow-hidden flex items-center justify-center"
+            style={{ boxShadow: "inset 4px 4px 10px rgba(0,0,0,0.15)" }}
+          >
+            {/* Scanlines */}
+            <div className="absolute inset-0 pointer-events-none"
+              style={{ background: "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px)" }} />
+
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
+              className="w-28 h-28 border-8 border-dashed border-[#0055FF] rounded-full absolute opacity-20"
             />
-            
-            <div className="relative z-10 text-center bg-white border-4 border-black p-4 brutal-shadow rotate-2">
-              <p className="text-accent-pink font-black font-mono tracking-widest uppercase text-xl">Agent Active</p>
-              <h3 className="text-3xl font-black mt-2">Analyzing DOM...</h3>
+
+            <div
+              className="relative z-10 bg-white border-4 border-black p-5 rotate-2"
+              style={{ boxShadow: "6px 6px 0px 0px #000" }}
+            >
+              <p className="text-[#FF0055] font-black font-mono tracking-widest uppercase text-lg">Agent Active</p>
+              <h3 className="text-3xl font-black mt-1">Analyzing DOM...</h3>
             </div>
           </div>
         </div>

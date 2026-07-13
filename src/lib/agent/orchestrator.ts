@@ -1,8 +1,8 @@
 import { Page } from "playwright";
 import { getBrowserSession, captureScreenshot } from "../browser/session";
-import { askGeminiVision } from "./gemini";
-import { askOpenAIVision } from "./openai";
-import { askGroqVision } from "./groq";
+import { askGeminiVision } from "../ai/gemini";
+import { askOpenAIVision } from "../ai/openai";
+import { askGroqVision } from "../ai/groq";
 
 export type AIProvider = "gemini" | "openai" | "groq";
 

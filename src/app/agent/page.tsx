@@ -5,7 +5,7 @@ import BrowserPreview from "@/components/agent/BrowserPreview";
 import ExecutionLogs from "@/components/agent/ExecutionLogs";
 import Link from "next/link";
 
-export type AIProvider = "gemini" | "openai";
+export type AIProvider = "gemini" | "openai" | "groq";
 export type Message = { sender: "user" | "agent"; text: string };
 export type TaskEntry = { id: string; prompt: string; timestamp: string; provider: AIProvider };
 
@@ -16,7 +16,7 @@ export default function AgentPage() {
   const [chatHistory, setChatHistory] = useState<Message[]>([
     { sender: "agent", text: "BrowserPilot AI is ready. Choose your AI provider and give me a task!" },
   ]);
-  const [provider, setProvider] = useState<AIProvider>("gemini");
+  const [provider, setProvider] = useState<AIProvider>("groq");
   const [approvalMode, setApprovalMode] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [taskHistory, setTaskHistory] = useState<TaskEntry[]>([]);
@@ -103,8 +103,14 @@ export default function AgentPage() {
         <div className="flex items-center gap-3">
           <div className="border-4 border-black bg-white flex overflow-hidden" style={{ boxShadow: "4px 4px 0 0 #000" }}>
             <button
+              onClick={() => setProvider("groq")}
+              className={`px-4 py-1.5 font-black text-sm uppercase tracking-wider transition-all ${provider === "groq" ? "bg-[#0055FF] text-white" : "bg-white text-black"}`}
+            >
+              ⚡ Groq
+            </button>
+            <button
               onClick={() => setProvider("gemini")}
-              className={`px-4 py-1.5 font-black text-sm uppercase tracking-wider transition-all ${provider === "gemini" ? "bg-[#0055FF] text-white" : "bg-white text-black"}`}
+              className={`px-4 py-1.5 font-black text-sm uppercase tracking-wider border-l-4 border-black transition-all ${provider === "gemini" ? "bg-[#0055FF] text-white" : "bg-white text-black"}`}
             >
               Gemini
             </button>

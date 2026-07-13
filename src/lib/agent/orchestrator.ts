@@ -2,8 +2,9 @@ import { Page } from "playwright";
 import { getBrowserSession, captureScreenshot } from "../browser/session";
 import { askGeminiVision } from "./gemini";
 import { askOpenAIVision } from "./openai";
+import { askGroqVision } from "./groq";
 
-export type AIProvider = "gemini" | "openai";
+export type AIProvider = "gemini" | "openai" | "groq";
 
 interface AgentAction {
   thought: string;
@@ -59,8 +60,10 @@ async function callAI(
 
   if (provider === "gemini") {
     rawText = await askGeminiVision(prompt, screenshotBase64);
-  } else {
+  } else if (provider === "openai") {
     rawText = await askOpenAIVision(prompt, screenshotBase64);
+  } else {
+    rawText = await askGroqVision(prompt, screenshotBase64);
   }
 
   // Strip markdown code block if present
@@ -70,7 +73,7 @@ async function callAI(
 
 export async function runAgentOrchestrator(
   instruction: string,
-  provider: AIProvider = "gemini",
+  provider: AIProvider = "groq",
   onUpdate: (event: UpdateEvent) => void,
   approvalMode: boolean = false,
   pendingApproval?: { resolve: (approved: boolean) => void } | null

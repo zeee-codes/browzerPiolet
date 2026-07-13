@@ -40,7 +40,7 @@ export default function ChatInterface({ history, onSendMessage, isRunning, onSto
       <div className="bg-[#0055FF] text-white font-black uppercase text-sm p-3 border-b-4 border-black tracking-widest flex justify-between items-center flex-shrink-0">
         <span>🗣️ ORCHESTRATOR</span>
         <span className="text-xs font-mono bg-white text-[#0055FF] px-2 py-1 border-2 border-white">
-          {provider === "gemini" ? "✦ GEMINI" : "⬡ GPT-4O"}
+          {provider === "gemini" ? "✦ GEMINI" : provider === "groq" ? "⚡ GROQ" : "⬡ GPT-4O"}
         </span>
       </div>
 

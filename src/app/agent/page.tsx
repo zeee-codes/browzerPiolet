@@ -4,6 +4,8 @@ import ChatInterface from "@/components/agent/ChatInterface";
 import BrowserPreview from "@/components/agent/BrowserPreview";
 import ExecutionLogs from "@/components/agent/ExecutionLogs";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export type AIProvider = "gemini" | "openai" | "groq";
 export type Message = { sender: "user" | "agent"; text: string };
@@ -22,6 +24,14 @@ export default function AgentPage() {
   const [taskHistory, setTaskHistory] = useState<TaskEntry[]>([]);
   const [showHistory, setShowHistory] = useState(false);
   const eventSourceRef = useRef<EventSource | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const session = localStorage.getItem("mvp_session");
+    if (!session) {
+      router.push("/login");
+    }
+  }, [router]);
 
   const addLog = (msg: string) => setLogs((prev) => [...prev, msg]);
 
@@ -145,6 +155,18 @@ export default function AgentPage() {
             style={{ boxShadow: "4px 4px 0 0 #000" }}>
             {isRunning ? "● RUNNING" : "○ IDLE"}
           </div>
+
+          {/* Sign Out Button */}
+          <button
+            onClick={() => {
+              localStorage.removeItem("mvp_session");
+              router.push("/login");
+            }}
+            className="px-4 py-2 border-4 border-black bg-[#FF0055] text-white font-black text-sm uppercase hover:bg-pink-600 transition-colors"
+            style={{ boxShadow: "4px 4px 0 0 #000" }}
+          >
+            SIGN OUT
+          </button>
         </div>
       </header>
 

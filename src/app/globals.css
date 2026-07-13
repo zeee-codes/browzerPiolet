@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: #EAEAEA;
+  --color-foreground: #000000;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  
+  /* Brutalist high-contrast colors */
+  --color-accent-blue: #0055FF;
+  --color-accent-pink: #FF0055;
+  --color-accent-yellow: #DFFF00;
+  
+  --color-border: #000000;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  overflow-x: hidden;
+  /* Use a slight grainy texture for brutalism */
+  background-image: radial-gradient(#d0d0d0 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Custom Brutalist Utilities */
+@utility brutal-border {
+  border: 4px solid var(--color-border);
+}
+
+@utility brutal-shadow {
+  box-shadow: 8px 8px 0px 0px var(--color-border);
+  transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@utility brutal-shadow-hover {
+  &:hover {
+    box-shadow: 4px 4px 0px 0px var(--color-border);
+    transform: translate(4px, 4px);
+  }
+  &:active {
+    box-shadow: 0px 0px 0px 0px var(--color-border);
+    transform: translate(8px, 8px);
+  }
+}
+
+/* Skeuomorphic tactile utility */
+@utility skeuo-inner {
+  box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.4), inset -4px -4px 10px rgba(255, 255, 255, 0.8);
+}
+
+@utility skeuo-button {
+  box-shadow: 4px 4px 0px 0px #000, inset 2px 2px 5px rgba(255, 255, 255, 0.5), inset -2px -2px 5px rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  border-left: 2px solid #000;
+}
+::-webkit-scrollbar-track {
+  background: #EAEAEA;
+}
+::-webkit-scrollbar-thumb {
+  background: #000;
+  border: 2px solid #000;
+}
+

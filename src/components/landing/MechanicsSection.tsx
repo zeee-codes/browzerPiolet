@@ -50,7 +50,7 @@ export default function MechanicsSection() {
           );
         }
       });
-    }, sectionRef);
+    }, sectionRef.current || undefined);
 
     return () => ctx.revert();
   }, []);

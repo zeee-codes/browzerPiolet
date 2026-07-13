@@ -28,7 +28,7 @@ export default function LandingHero() {
         duration: 0.6,
         ease: "power2.out"
       }, "-=0.4");
-    }, containerRef);
+    }, containerRef.current || undefined);
 
     return () => ctx.revert();
   }, []);
